@@ -40,10 +40,16 @@ class SchedulerServiceTest {
         Program program = getProgramDummy();
 
         Mockito.when(repository.findById(programId)).thenReturn(Mono.just(program));
-        //TODO: hacer una subscripción de el servicio reactivo
+        //listo
         Flux<ProgramDate> response = schedulerService.generateCalendar(programId, startDate);
+        //listo
+        StepVerifier.create(response).expectNextCount(13).verifyComplete();
+        //listo
+//        StepVerifier.create(response)
+//                .expectNextMatches(r->r.getDate().equals("2021-03-01"))
+//
+//                .verifyComplete();
 
-        StepVerifier.create(response).expectNextCount(13).verifyComplete(); //TODO: hacer de otro modo
         Assertions.assertEquals(getSnapResult(), new Gson().toJson(response));//TODO: hacer de otro modo
         Mockito.verify(repository).findById(programId);
     }
