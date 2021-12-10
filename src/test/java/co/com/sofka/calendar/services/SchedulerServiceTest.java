@@ -5,16 +5,10 @@ import co.com.sofka.calendar.collections.Program;
 import co.com.sofka.calendar.collections.Time;
 import co.com.sofka.calendar.model.ProgramDate;
 import co.com.sofka.calendar.repositories.ProgramRepository;
-import com.google.gson.Gson;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -47,64 +41,56 @@ class SchedulerServiceTest {
 
         //listo: hacer de otro modo
         StepVerifier.create(response)
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-03")
-                            && programDate.getCategoryName().equals("Principios");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-04")
-                            && programDate.getCategoryName().equals("Principios");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-05")
-                            && programDate.getCategoryName().equals("Bases");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-06")
-                            && programDate.getCategoryName().equals("Bases");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-07")
-                            && programDate.getCategoryName().equals("Fundamentos");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-10")
-                            && programDate.getCategoryName().equals("Fundamentos");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-11")
-                            && programDate.getCategoryName().equals("Fundamentos");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-12")
-                            && programDate.getCategoryName().equals("Fundamentos");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-13")
-                            && programDate.getCategoryName().equals("Fundamentos avazandos");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-14")
-                            && programDate.getCategoryName().equals("Fundamentos avazandos");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-17")
-                            && programDate.getCategoryName().equals("Fundamentos avazandos");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-18")
-                            && programDate.getCategoryName().equals("Fundamentos avazandos");
-                })
-                .expectNextMatches(programDate -> {
-                    return programDate.getDate().toString().equals("2022-01-19")
-                            && programDate.getCategoryName().equals("Fundamentos avazandos");
-                })
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-03","Principios")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-04","Principios")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-05","Bases")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-06","Bases")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-07","Fundamentos")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-10","Fundamentos")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-11","Fundamentos")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-12","Fundamentos")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-13","Fundamentos avazandos")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-14","Fundamentos avazandos")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-17","Fundamentos avazandos")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-18","Fundamentos avazandos")
+                )
+                .expectNextMatches(programDate ->
+                        validate(programDate,"2022-01-19","Fundamentos avazandos")
+                )
                 .verifyComplete();
 
         //listo: hacer de otro modo
         StepVerifier.create(response).expectNextCount(13).verifyComplete();
 
         Mockito.verify(repository).findById(programId);
+    }
+
+    private boolean validate(ProgramDate programDate,String date,String name) {
+        return programDate.getDate().toString().equals(date)
+               && programDate.getCategoryName().equals(name);
     }
 
     @Test
