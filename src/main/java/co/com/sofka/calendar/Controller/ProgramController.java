@@ -16,7 +16,7 @@ import java.util.List;
 public class ProgramController {
     @Autowired
     private SchedulerService schedulerService;
-
+    //El id debe ser el que está en mongo
     @GetMapping(value = "/{id}")
     public Flux<ProgramDate> get(@PathVariable("id") String id){
         var startDate = LocalDate.of(2022, 1, 1);

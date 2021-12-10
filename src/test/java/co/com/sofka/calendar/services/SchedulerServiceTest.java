@@ -32,8 +32,6 @@ class SchedulerServiceTest {
     @Mock
     private ProgramRepository repository;
 
-
-
     @Test
         //TODO: modificar el test para que el act sea reactivo, usando stepverifier
     void generateCalendar() {
@@ -43,10 +41,11 @@ class SchedulerServiceTest {
         Program program = getProgramDummy();
 
         Mockito.when(repository.findById(programId)).thenReturn(Mono.just(program));
-        //listo
+        //Listo: hacer una subscripción de el servicio reactivo // Se realiza mediante el stepverifier
+
         Flux<ProgramDate> response = schedulerService.generateCalendar(programId, startDate);
 
-        //listo
+        //listo: hacer de otro modo
         StepVerifier.create(response)
                 .expectNextMatches(programDate -> {
                     return programDate.getDate().toString().equals("2022-01-03")
@@ -102,7 +101,7 @@ class SchedulerServiceTest {
                 })
                 .verifyComplete();
 
-        //listo
+        //listo: hacer de otro modo
         StepVerifier.create(response).expectNextCount(13).verifyComplete();
 
         Mockito.verify(repository).findById(programId);
@@ -115,12 +114,16 @@ class SchedulerServiceTest {
 
         Mockito.when(repository.findById(programId)).thenReturn(Mono.empty());
 
-        //TODO: hacer de otro modo
-        var exception = Assertions.assertThrows(RuntimeException.class, () -> {
-            schedulerService.generateCalendar(programId, startDate);//TODO: hacer una subscripción de el servicio reactivo
+        //Listo: hacer de otro modo // Se hace con el stepverifier
+        //Listo: hacer una subscripción de el servicio reactivo // Se realiza mediante el stepverifier
 
-        });
-        Assertions.assertEquals("El programa academnico no existe", exception.getMessage());//TODO: hacer de otro modo
+        Flux<ProgramDate> response = schedulerService.generateCalendar(programId, startDate);
+
+        //Listo: hacer de otro modo
+        StepVerifier.create(response)
+                .expectErrorMessage("El programa academnico no existe")
+                .verify();
+
         Mockito.verify(repository).findById(programId);
 
     }
