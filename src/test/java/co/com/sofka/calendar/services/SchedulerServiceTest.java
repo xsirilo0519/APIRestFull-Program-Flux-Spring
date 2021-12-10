@@ -26,30 +26,23 @@ import java.util.List;
 @DataMongoTest
 class SchedulerServiceTest {
 
-//    @InjectMocks
-//    SchedulerService schedulerService;
-//
-//    @Mock
-    @Autowired
+    @InjectMocks
+    SchedulerService schedulerService;
+
+    @Mock
     private ProgramRepository repository;
 
-    private  SchedulerService schedulerService;
 
-    @BeforeEach
-    void before(){
-        this.schedulerService= new SchedulerService(repository);
-    }
 
-    
     @Test
         //TODO: modificar el test para que el act sea reactivo, usando stepverifier
     void generateCalendar() {
         var programId = "61b3a395913fafddeb854f36";
         var startDate = LocalDate.of(2022, 1, 1);
 
-//        Program program = getProgramDummy();
+        Program program = getProgramDummy();
 
-//        Mockito.when(repository.findById(programId)).thenReturn(Mono.just(program));
+        Mockito.when(repository.findById(programId)).thenReturn(Mono.just(program));
         //listo
         Flux<ProgramDate> response = schedulerService.generateCalendar(programId, startDate);
 
@@ -112,7 +105,7 @@ class SchedulerServiceTest {
         //listo
         StepVerifier.create(response).expectNextCount(13).verifyComplete();
 
-//        Mockito.verify(repository).findById(programId);
+        Mockito.verify(repository).findById(programId);
     }
 
     @Test
