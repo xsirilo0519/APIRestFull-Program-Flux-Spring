@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,29 +24,32 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 @DataMongoTest
-@ExtendWith(MockitoExtension.class)
 class SchedulerServiceTest {
 
 //    @InjectMocks
 //    SchedulerService schedulerService;
 //
 //    @Mock
-    private  SchedulerService schedulerService;
+    @Autowired
     private ProgramRepository repository;
+
+    private  SchedulerService schedulerService;
 
     @BeforeEach
     void before(){
         this.schedulerService= new SchedulerService(repository);
     }
+
+    
     @Test
         //TODO: modificar el test para que el act sea reactivo, usando stepverifier
     void generateCalendar() {
         var programId = "61b3a395913fafddeb854f36";
         var startDate = LocalDate.of(2022, 1, 1);
 
-        Program program = getProgramDummy();
+//        Program program = getProgramDummy();
 
-        Mockito.when(repository.findById(programId)).thenReturn(Mono.just(program));
+//        Mockito.when(repository.findById(programId)).thenReturn(Mono.just(program));
         //listo
         Flux<ProgramDate> response = schedulerService.generateCalendar(programId, startDate);
 
