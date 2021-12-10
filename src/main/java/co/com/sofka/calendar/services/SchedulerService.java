@@ -22,8 +22,13 @@ import java.util.stream.Stream;
 @Service
 public class SchedulerService {
 
-    @Autowired
+
     private ProgramRepository programRepository;
+
+    @Autowired
+    public SchedulerService(ProgramRepository programRepository) {
+        this.programRepository=programRepository;
+    }
 
     //TODO: deben retornar un flux de programDate Flux<ProgramDate>
     public Flux<ProgramDate> generateCalendar(String programId, LocalDate startDate) {
